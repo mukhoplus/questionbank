@@ -1,6 +1,7 @@
+import os
 from docx import Document
-from docx.shared import Pt
-from utils import set_row_height_table, apply_table_styles, get_answer_info, table_sort_center
+from docx.shared import Inches, Pt
+from utils import set_row_height_table, apply_table_styles, table_sort_center
 
 def create_document(title_template, input_number, shuffled_list):
   doc_question = Document()
@@ -49,11 +50,24 @@ def create_document(title_template, input_number, shuffled_list):
 
     output_number = i - 1
     question = shuffled_list[output_number - 1]
-    output_number_template = f"<{output_number}번>"
+    output_number_template = f"<{output_number}번>\n"
 
-    question_data.text = f"{output_number_template}\n{question['<문제>']}"
+    question_data.text = output_number_template
+    run = question_data.add_paragraph().add_run()
+
+    if question['<제시그림>']:
+      image_path = question['<제시그림>']
+      
+      if os.path.exists(image_path):
+        run.add_picture(image_path, width=Inches(3))  # 이미지 크기는 필요에 따라 조절
+  
+    question_data.add_paragraph(f"{question['<문제>']}")
+
+    if question['유형'] == '객관식':
+      question_data.add_paragraph(f"\n{question['<답가지>']}")
+    
     empty_data.text = output_number_template
-    answer_data.text = f"{output_number_template}\n{get_answer_info(question['유형'], question['<답가지>'], question['<정답>'])}"
+    answer_data.text = f"{output_number_template}\n{question['<정답>']}"
 
   # 글꼴 설정
   apply_table_styles(question_table)
@@ -62,7 +76,7 @@ def create_document(title_template, input_number, shuffled_list):
 
   return doc_question, doc_empty, doc_answer
 
-def save_documents(doc_question, doc_empty, doc_answer, input_title):
+def save_documents(doc_question, doc_empty, doc_answer, input_title, images_output_folder):
   try:
     question_path = f'[{input_title}] 문제지.docx'
     doc_question.save(question_path)
