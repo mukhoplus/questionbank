@@ -1,7 +1,7 @@
 import openpyxl
 import os
 
-def parse_excel_file(excel_path, sheet_name, images_output_folder):
+def parse_excel_file(excel_path, sheet_name, images_output_folder, is_mid):
   try:
     workbook = openpyxl.load_workbook(excel_path, data_only=True)
     worksheet = workbook[sheet_name]
@@ -14,11 +14,14 @@ def parse_excel_file(excel_path, sheet_name, images_output_folder):
     for row_index, row in enumerate(worksheet.iter_rows(min_row=2, values_only=True), start=2):  # 행 번호를 시작 인덱스로 사용
       if not row[5]:
         break
+      
+      if is_mid and not row[1].startswith('중간'):
+        continue
 
       question = {
         '검수용 번호': row[0],
         '시험': row[1],
-        '유형': row[2],
+        '유형': row[2], # '중간고사', '기말고사', '중간고사, 기말고사' 3가지의 입력이 있다고 합의
         '교수님': row[3],
         '<출제 년도>': row[4],
         '<문제>': row[5],
@@ -28,7 +31,7 @@ def parse_excel_file(excel_path, sheet_name, images_output_folder):
         '<족보 페이지 또는 해설>': row[9] if row[9] else '',
       }
       question_bank.append(question)
-
+    print(question_bank)
     return question_bank
   except FileNotFoundError:
     raise FileNotFoundError('해당 파일이 없습니다.')

@@ -76,7 +76,7 @@ def create_document(title_template, input_number, shuffled_list):
 
   return doc_question, doc_empty, doc_answer
 
-def save_documents(doc_question, doc_empty, doc_answer, input_title, images_output_folder):
+def save_documents(doc_question, doc_empty, doc_answer, input_title):
   try:
     question_path = f'[{input_title}] 문제지.docx'
     doc_question.save(question_path)
