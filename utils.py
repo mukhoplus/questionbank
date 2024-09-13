@@ -2,6 +2,7 @@ from docx.shared import Pt
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.enum.table import WD_TABLE_ALIGNMENT
+from tkinter import messagebox
 
 def set_row_height_table(table):
   def set_row_height(row, height):
@@ -42,3 +43,38 @@ def apply_table_styles(table):
 
 def table_sort_center(document, row_index):
   document.tables[row_index].rows[0].cells[0].paragraphs[0].alignment = WD_TABLE_ALIGNMENT.CENTER
+
+def handling_input_exception(input_title, input_number, year):
+  if not input_title:
+    messagebox.showwarning('경고', '과목명을 입력해주세요.')
+    return False
+  
+  if not input_number:
+    messagebox.showwarning('경고', '문제 수를 입력해주세요.')
+    return False
+  
+  if not year:
+    messagebox.showwarning('경고', '학년도를 입력해주세요.')
+    return False
+  
+  try:
+    error_check = int(input_number)
+    if type(error_check) != int:
+      raise ValueError
+    if int(input_number) < 1:
+      raise ValueError
+  except:
+    messagebox.showwarning('경고', '문제 수는 1 이상의 정수여야 합니다.')
+    return False
+  
+  try:
+    error_check = int(year)
+    if type(error_check) != int:
+      raise ValueError
+    if error_check < 0:
+      raise ValueError
+  except:
+    messagebox.showwarning('경고', '학년도는 0 이상의 정수여야 합니다.')
+    return False
+
+  return True

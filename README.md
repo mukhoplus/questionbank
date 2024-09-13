@@ -1,6 +1,3 @@
 ## Question Bank
 
-### 계획
-
-1. 기능 구현
-2. GUI 구현
+![Question_Bank](https://github.com/user-attachments/assets/e3b35cd3-e881-4000-af31-74e8b70adff8)

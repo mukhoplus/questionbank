@@ -1,10 +1,14 @@
-import openpyxl
-import os
+import openpyxl, os
+from tkinter import messagebox
 
 def parse_excel_file(excel_path, sheet_name, images_output_folder, is_mid):
   try:
     workbook = openpyxl.load_workbook(excel_path, data_only=True)
     worksheet = workbook[sheet_name]
+    
+    if not worksheet:
+      messagebox.showerror('오류', '"문제은행" 시트를 찾을 수 없습니다.')
+      return
 
     # 이미지가 저장될 폴더가 없으면 생성
     if not os.path.exists(images_output_folder):
@@ -31,7 +35,11 @@ def parse_excel_file(excel_path, sheet_name, images_output_folder, is_mid):
         '<족보 페이지 또는 해설>': row[9] if row[9] else '',
       }
       question_bank.append(question)
-    print(question_bank)
+
     return question_bank
   except FileNotFoundError:
-    raise FileNotFoundError('해당 파일이 없습니다.')
+    messagebox.showerror('오류', '엑셀 파일을 찾을 수 없습니다.')
+    return
+  except Exception:
+    messagebox.showerror('오류', '엑셀 파일을 여는 중 오류가 발생했습니다.')
+    return

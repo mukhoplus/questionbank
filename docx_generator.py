@@ -1,6 +1,7 @@
 import os
+from tkinter import messagebox
 from docx import Document
-from docx.shared import Inches, Pt
+from docx.shared import Inches
 from utils import set_row_height_table, apply_table_styles, table_sort_center
 
 def create_document(title_template, input_number, shuffled_list):
@@ -69,7 +70,6 @@ def create_document(title_template, input_number, shuffled_list):
     empty_data.text = output_number_template
     answer_data.text = f"{output_number_template}\n{question['<정답>']}"
 
-  # 글꼴 설정
   apply_table_styles(question_table)
   apply_table_styles(empty_table)
   apply_table_styles(answer_table)
@@ -80,14 +80,14 @@ def save_documents(doc_question, doc_empty, doc_answer, input_title):
   try:
     question_path = f'[{input_title}] 문제지.docx'
     doc_question.save(question_path)
-    print(f"문제지 파일이 {question_path}에 저장되었습니다.")
 
     empty_path = f'[{input_title}] 답안지.docx'
     doc_empty.save(empty_path)
-    print(f"답안지 파일이 {empty_path}에 저장되었습니다.")
 
     answer_path = f'[{input_title}] 정답지.docx'
     doc_answer.save(answer_path)
-    print(f"정답지 파일이 {answer_path}에 저장되었습니다.")
+
+    messagebox.showinfo('성공', '모의고사 생성에 성공했습니다.')
   except PermissionError:
-    print('열려 있는 파일을 닫고, 다시 시도해주세요.')
+    messagebox.showerror('오류', '열려 있는 파일을 닫고, 다시 시도해주세요.')
+    return
