@@ -51,7 +51,7 @@ def create_document(title_template, input_number, shuffled_list):
 
     output_number = i - 1
     question = shuffled_list[output_number - 1]
-    output_number_template = f"<{output_number}번>\n"
+    output_number_template = f"<{output_number}번>"
 
     question_data.text = output_number_template
     run = question_data.add_paragraph().add_run()

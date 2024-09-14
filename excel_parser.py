@@ -1,5 +1,6 @@
 import openpyxl, os
 from tkinter import messagebox
+from utils import get_subject
 
 def parse_excel_file(excel_path, sheet_name, images_output_folder, is_mid):
   try:
@@ -13,6 +14,8 @@ def parse_excel_file(excel_path, sheet_name, images_output_folder, is_mid):
     # 이미지가 저장될 폴더가 없으면 생성
     if not os.path.exists(images_output_folder):
       os.makedirs(images_output_folder)
+
+    subject = get_subject(excel_path)
 
     question_bank = []
     for row_index, row in enumerate(worksheet.iter_rows(min_row=2, values_only=True), start=2):  # 행 번호를 시작 인덱스로 사용
@@ -30,7 +33,7 @@ def parse_excel_file(excel_path, sheet_name, images_output_folder, is_mid):
         '<출제 년도>': row[4],
         '<문제>': row[5],
         '<답가지>': row[6] if row[6] else '',  # None 값 처리
-        '<제시그림>': row[7], # '.\images\image_검수용 번호' (과목_검수용 번호 검토 중)
+        '<제시그림>': f'{images_output_folder}\{subject}_{row[0]}.jpg' if row[7] else '', # .\images\{과목명}_{검수용 번호}
         '<정답>': row[8],
         '<족보 페이지 또는 해설>': row[9] if row[9] else '',
       }

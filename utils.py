@@ -78,3 +78,10 @@ def handling_input_exception(input_title, input_number, year):
     return False
 
   return True
+
+def get_subject(excel_path):
+  path_list = excel_path.split('_')
+  file_list = path_list[-1].split('.')
+  subject = file_list[0]
+
+  return subject
