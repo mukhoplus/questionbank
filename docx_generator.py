@@ -54,12 +54,12 @@ def create_document(title_template, input_number, shuffled_list):
     output_number_template = f"<{output_number}번>"
 
     question_data.text = output_number_template
-    run = question_data.add_paragraph().add_run()
 
     if question['<제시그림>']:
       image_path = question['<제시그림>']
-      
+
       if os.path.exists(image_path):
+        run = question_data.add_paragraph().add_run()
         run.add_picture(image_path, width=Inches(3))  # 이미지 크기는 필요에 따라 조절
   
     question_data.add_paragraph(f"{question['<문제>']}")

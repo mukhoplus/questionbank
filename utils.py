@@ -5,18 +5,18 @@ from docx.enum.table import WD_TABLE_ALIGNMENT
 from tkinter import messagebox
 
 def set_row_height_table(table):
-  def set_row_height(row, height):
+  def set_row_height(row, min_height):
     tr = row._tr
     trPr = tr.get_or_add_trPr()
     trHeight = OxmlElement('w:trHeight')
-    trHeight.set(qn('w:val'), str(height))
-    trHeight.set(qn('w:hRule'), 'exact')
+    trHeight.set(qn('w:val'), str(min_height))
+    trHeight.set(qn('w:hRule'), 'atLeast')
     trPr.append(trHeight)
 
   i = 0
   for row in table.rows:
-    height = Pt(0.06) if i < 2 else Pt(0.09)
-    set_row_height(row, height)
+    min_height = Pt(0.06) if i < 2 else Pt(0.09)
+    set_row_height(row, min_height)
     i += 1
 
 def set_font(cell, font_name, font_size, bold=False):

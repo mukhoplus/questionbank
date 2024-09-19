@@ -28,7 +28,7 @@ def generate_documents():
     question_number = int(input_number.get()) if int(input_number.get()) <= limit else limit
 
     shuffled_list = random.sample(question_bank, limit)
-    title_template = f'{year.get()}학년도 {semester.get()}학기 {exam_type.get()}고사 대비 모의고사 {input_title} 과목 '
+    title_template = f'{year.get()}학년도 {semester.get()}학기 {exam_type.get()}고사 대비 모의고사 {input_title.get()} 과목 '
 
     doc_question, doc_empty, doc_answer = create_document(title_template, question_number, shuffled_list)
     save_documents(doc_question, doc_empty, doc_answer, input_title.get())
