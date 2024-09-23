@@ -33,8 +33,8 @@ def parse_excel_file(excel_path, sheet_name, images_output_folder, is_mid):
         '<출제 년도>': row[4],
         '<문제>': row[5],
         '<답가지>': row[6] if row[6] else '',  # None 값 처리
-        '<제시그림>': f'{images_output_folder}\{subject}_{row[0]}.jpg' if row[7] else '', # .\images\{과목명}_{검수용 번호}
-        '<정답>': row[8],
+        '<제시그림>': f'{images_output_folder}\{subject}_{row[0]}.' if row[7] == '<그림>' else '', # .\images\{과목명}_{검수용 번호}
+        '<정답>': f'{images_output_folder}\{subject}_{row[0]}_정답.' if row[8] == '<그림>' else row[8], # .\images\{과목명}_{검수용 번호}_정답
         '<족보 페이지 또는 해설>': row[9] if row[9] else '',
       }
       question_bank.append(question)

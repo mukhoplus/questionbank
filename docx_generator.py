@@ -4,7 +4,7 @@ from docx import Document
 from docx.shared import Inches
 from utils import set_row_height_table, apply_table_styles, table_sort_center
 
-def create_document(title_template, input_number, shuffled_list):
+def create_document(title_template, input_number, shuffled_list, images_output_folder):
   doc_question = Document()
   doc_empty = Document()
   doc_answer = Document()
@@ -55,20 +55,36 @@ def create_document(title_template, input_number, shuffled_list):
 
     question_data.text = output_number_template
 
+    # 문제에 이미지 포함 여부 확인
     if question['<제시그림>']:
-      image_path = question['<제시그림>']
+      for extension in ['jpg', 'png']:
+        image_path = f"{question['<제시그림>']}{extension}"
 
-      if os.path.exists(image_path):
-        run = question_data.add_paragraph().add_run()
-        run.add_picture(image_path, width=Inches(3))  # 이미지 크기는 필요에 따라 조절
-  
+        if os.path.exists(image_path):
+          run = question_data.add_paragraph().add_run()
+          run.add_picture(image_path, width=Inches(3))  # 이미지 크기는 필요에 따라 조절
+          break
+
     question_data.add_paragraph(f"{question['<문제>']}")
 
     if question['유형'] == '객관식':
       question_data.add_paragraph(f"\n{question['<답가지>']}")
-    
+
     empty_data.text = output_number_template
-    answer_data.text = f"{output_number_template}\n{question['<정답>']}"
+
+    # 정답 이미지 or 텍스트
+    answer_data.text = f"{output_number_template}"
+
+    if question['<정답>'].startswith(images_output_folder):
+      for extension in ['jpg', 'png']:
+        image_path = f"{question['<정답>']}{extension}"
+
+        if os.path.exists(image_path):
+          run = answer_data.add_paragraph().add_run()
+          run.add_picture(image_path, width=Inches(3))
+          break
+    else:
+      answer_data.text += f"\n{question['<정답>']}"
 
   apply_table_styles(question_table)
   apply_table_styles(empty_table)
