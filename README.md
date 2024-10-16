@@ -4,4 +4,4 @@
 
 ### Version
 
-`1.0.3-release`
+`1.0.4-release`

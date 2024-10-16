@@ -19,8 +19,9 @@ def parse_excel_file(excel_path, sheet_name, images_output_folder, is_mid):
 
     question_bank = []
     for row_index, row in enumerate(worksheet.iter_rows(min_row=2, values_only=True), start=2):  # 행 번호를 시작 인덱스로 사용
-      if not row[5]:
-        break
+      # 문제와 제시 그림이 둘다 없는 경우 잘못된 선지
+      if not row[5] and not row[7]:
+        continue
       
       if is_mid and not row[1].startswith('중간'):
         continue
